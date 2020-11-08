@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/07 20:46:01 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 10:36:49 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,19 @@ static t_buffer_list	*find_buffer(t_buffer_list *buffers, int fd)
 	return (NULL);
 }
 
+static t_buffer_list	*new_buffer_list(t_buffer_list *tail, int fd)
+{
+	t_buffer_list	*buf;
+
+	buf = malloc(sizeof(t_buffer_list));
+	buf->fd = fd;
+	buf->cursor = 0;
+	buf->size = 0;
+	buf->next = tail;
+	buf->eof = 0;
+	return (buf);
+}
+
 #include <stdio.h>
 
 int	get_next_line(int fd, char **line)
@@ -36,15 +49,7 @@ int	get_next_line(int fd, char **line)
 
 	buf = find_buffer(buffers, fd);
 	if (!buf)
-	{
-		buf = malloc(sizeof(t_buffer_list));
-		buf->fd = fd;
-		buf->cursor = 0;
-		buf->size = 0;
-		buf->next = buffers;
-		buf->eof = 0;
-		buffers = buf;
-	}
+		buf = buffers = new_buffer_list(buffers, fd);
 
 	t_string_list	*strings;
 	t_string_list	*str;
