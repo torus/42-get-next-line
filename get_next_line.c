@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 11:22:29 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 11:47:55 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,21 @@ static t_string_list	*new_string(t_string_list *tail, const char *str, size_t si
 
 #include <stdio.h>
 
+static int			string_list_length(t_string_list *str)
+{
+	int	len;
+
+	printf("strings: %p\n", str);
+	len = 0;
+	while (str)
+	{
+		len += str->size;
+		str = str->next;
+		printf("len: %d\n", len);
+	}
+	return (len);
+}
+
 int	get_next_line(int fd, char **line)
 {
 	static t_buffer_list	*buffers;
@@ -98,7 +113,7 @@ int	get_next_line(int fd, char **line)
 		index = buf->cursor;
 		while (index < buf->size && buf->buffer[index] != '\n')
 			index++;
-		str = new_string(strings, buf->buffer + buf->cursor, index - buf->cursor);
+		strings = str = new_string(strings, buf->buffer + buf->cursor, index - buf->cursor);
 		buf->cursor = index;
 
 		/* printf("copied: \"%s\"\n", str->str); */
@@ -111,14 +126,7 @@ int	get_next_line(int fd, char **line)
 	}
 
 	int	len;
-	len = 0;
-	str = strings;
-	while (str)
-	{
-		len += str->size;
-		str = str->next;
-		printf("len: %d\n", len);
-	}
+	len = string_list_length(strings);
 
 	char	*dest;
 	char	*p;
