@@ -8,8 +8,6 @@ int main(void)
 {
 
 
-
-
 	char *line = NULL;
 	int result = get_next_line(0, &line);
 
