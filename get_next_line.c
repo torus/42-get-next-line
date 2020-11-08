@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 10:36:49 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 11:22:29 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,28 @@ static t_buffer_list	*new_buffer_list(t_buffer_list *tail, int fd)
 	return (buf);
 }
 
+static int	load_to_buffer(t_buffer_list *buf, int fd)
+{
+	size_t	read_size;
+
+	read_size = read(fd, buf->buffer, BUFFER_SIZE);
+	buf->size = read_size;
+	buf->cursor = 0;
+	return (1);
+}
+
+static t_string_list	*new_string(t_string_list *tail, const char *str, size_t size)
+{
+	t_string_list	*new_str;
+
+	new_str = malloc(sizeof(t_string_list));
+	new_str->next = tail;
+	new_str->size = size;
+	new_str->str = malloc(size);
+	ft_memcpy(new_str->str, str, size);
+	return (new_str);
+}
+
 #include <stdio.h>
 
 int	get_next_line(int fd, char **line)
@@ -62,11 +84,8 @@ int	get_next_line(int fd, char **line)
 	{
 		if (buf->cursor == buf->size)
 		{
-			size_t	read_size;
-			read_size = read(fd, buf->buffer, BUFFER_SIZE);
-			buf->size = read_size;
-			buf->cursor = 0;
-			if (read_size == 0)
+			load_to_buffer(buf, fd);
+			if (buf->size == 0)
 			{
 				if (!strings)
 					return (0);
@@ -79,12 +98,7 @@ int	get_next_line(int fd, char **line)
 		index = buf->cursor;
 		while (index < buf->size && buf->buffer[index] != '\n')
 			index++;
-		str = malloc(sizeof(t_string_list));
-		str->next = strings;
-		strings = str;
-		str->size = index - buf->cursor;
-		str->str = malloc(str->size);
-		ft_memcpy(str->str, buf->buffer + buf->cursor, str->size);
+		str = new_string(strings, buf->buffer + buf->cursor, index - buf->cursor);
 		buf->cursor = index;
 
 		/* printf("copied: \"%s\"\n", str->str); */
