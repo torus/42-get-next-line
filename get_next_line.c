@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 16:06:58 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 18:23:18 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static char				*join_strings(t_string_list *str)
 	while (str)
 	{
 		next = str->next;
-		ft_memcpy(p - str->size, str->str, str->size);
+		if (dest)
+			ft_memcpy(p - str->size, str->str, str->size);
 		p -= str->size;
 		free(str->str);
 		free(str);
@@ -81,20 +82,19 @@ t_string_list			*make_string_list_from_buffer(t_buffer_list *buf,
 	{
 		if (buf->cursor == buf->size)
 		{
-			load_to_buffer(buf, fd);
+			if ((*status = load_to_buffer(buf, fd)) < 0)
+				return (NULL);
 			if (buf->size == 0)
 			{
 				if (!strings)
-				{
-					*status = 0;
 					return (NULL);
-				}
 				else
 					break ;
 			}
 		}
 		strings = append_string(strings, buf, &done);
 	}
+	*status = 1;
 	return (strings);
 }
 
@@ -110,12 +110,17 @@ int						get_next_line(int fd, char **line)
 	if (!buf)
 	{
 		buf = new_buffer_list(buffers, fd);
-		buffers = buf;
 		if (!buf)
 			return (-1);
+		buffers = buf;
 	}
 	strings = make_string_list_from_buffer(buf, fd, &status);
-	dest = join_strings(strings);
-	*line = dest;
-	return (1);
+	if (strings)
+	{
+		dest = join_strings(strings);
+		*line = dest;
+		if (!dest)
+			status = -1;
+	}
+	return (status);
 }

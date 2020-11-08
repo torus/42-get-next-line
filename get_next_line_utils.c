@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 15:25:40 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 16:02:50 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 18:09:12 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,15 @@ t_buffer_list	*new_buffer_list(t_buffer_list *tail, int fd)
 
 int				load_to_buffer(t_buffer_list *buf, int fd)
 {
-	size_t	read_size;
+	int	read_size;
 
 	read_size = read(fd, buf->buffer, BUFFER_SIZE);
-	buf->size = read_size;
-	buf->cursor = 0;
-	return (1);
+	if (read_size >= 0)
+	{
+		buf->size = read_size;
+		buf->cursor = 0;
+	}
+	return (read_size);
 }
 
 t_string_list	*new_string(t_string_list *tail,
