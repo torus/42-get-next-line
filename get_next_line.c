@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 11:47:55 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 13:39:20 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,30 @@ static int			string_list_length(t_string_list *str)
 	return (len);
 }
 
+static char			*join_strings(t_string_list *str)
+{
+	int	len;
+	len = string_list_length(str);
+
+	char	*dest;
+	char	*p;
+	dest = malloc(len + 1);
+	p = dest + len;
+	*p = '\0';
+	while (str)
+	{
+		t_string_list	*next;
+		next = str->next;
+		ft_memcpy(p - str->size, str->str, str->size);
+		/* printf("appending: %ld: \"%s\"\n", str->size, str->str); */
+		p -= str->size;
+		free(str->str);
+		free(str);
+		str = next;
+	}
+	return (dest);
+}
+
 int	get_next_line(int fd, char **line)
 {
 	static t_buffer_list	*buffers;
@@ -125,26 +149,8 @@ int	get_next_line(int fd, char **line)
 		}
 	}
 
-	int	len;
-	len = string_list_length(strings);
-
 	char	*dest;
-	char	*p;
-	dest = malloc(len + 1);
-	p = dest + len;
-	*p = '\0';
-	str = strings;
-	while (str)
-	{
-		t_string_list	*next;
-		next = str->next;
-		ft_memcpy(p - str->size, str->str, str->size);
-		/* printf("appending: %ld: \"%s\"\n", str->size, str->str); */
-		p -= str->size;
-		free(str->str);
-		free(str);
-		str = next;
-	}
+	dest = join_strings(strings);
 
 	printf("result: \"%s\"\n", dest);
 	*line = dest;
