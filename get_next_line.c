@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 13:53:18 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 13:53:44 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,8 @@ int	get_next_line(int fd, char **line)
 {
 	static t_buffer_list	*buffers;
 	t_buffer_list			*buf;
+	t_string_list			*strings;
+	char					*dest;
 
 	printf("buffers: %p\n", buffers);
 
@@ -153,10 +155,8 @@ int	get_next_line(int fd, char **line)
 	if (!buf)
 		buf = buffers = new_buffer_list(buffers, fd);
 
-	t_string_list	*strings;
 	strings = make_string_list_from_buffer(buf, fd);
 
-	char	*dest;
 	dest = join_strings(strings);
 
 	printf("result: \"%s\"\n", dest);
