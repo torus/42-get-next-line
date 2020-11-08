@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 14:23:41 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 14:26:12 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,19 +60,15 @@ static t_string_list	*new_string(t_string_list *tail, const char *str, size_t si
 	return (new_str);
 }
 
-#include <stdio.h>
-
 static int			string_list_length(t_string_list *str)
 {
 	int	len;
 
-	printf("strings: %p\n", str);
 	len = 0;
 	while (str)
 	{
 		len += str->size;
 		str = str->next;
-		printf("len: %d\n", len);
 	}
 	return (len);
 }
@@ -92,7 +88,6 @@ static char			*join_strings(t_string_list *str)
 		t_string_list	*next;
 		next = str->next;
 		ft_memcpy(p - str->size, str->str, str->size);
-		/* printf("appending: %ld: \"%s\"\n", str->size, str->str); */
 		p -= str->size;
 		free(str->str);
 		free(str);
@@ -111,9 +106,6 @@ static t_string_list		*append_string(t_string_list *strings, t_buffer_list *buf,
 		index++;
 	strings = new_string(strings, buf->buffer + buf->cursor, index - buf->cursor);
 	buf->cursor = index;
-
-	/* printf("copied: \"%s\"\n", str->str); */
-
 	if (buf->buffer[index] == '\n')
 	{
 		buf->cursor++;
@@ -125,7 +117,6 @@ static t_string_list		*append_string(t_string_list *strings, t_buffer_list *buf,
 t_string_list	*make_string_list_from_buffer(t_buffer_list *buf, int fd, int *status)
 {
 	t_string_list	*strings;
-	/* size_t			index; */
 	int				done;
 
 	strings = NULL;
@@ -145,9 +136,7 @@ t_string_list	*make_string_list_from_buffer(t_buffer_list *buf, int fd, int *sta
 				else
 					break ;
 			}
-			/* printf("read: \"%s\"\n", buf->buffer); */
 		}
-
 		strings = append_string(strings, buf, &done);
 	}
 	return (strings);
@@ -161,8 +150,6 @@ int	get_next_line(int fd, char **line)
 	char					*dest;
 	int						status;
 
-	printf("buffers: %p\n", buffers);
-
 	buf = find_buffer(buffers, fd);
 	if (!buf)
 	{
@@ -170,12 +157,8 @@ int	get_next_line(int fd, char **line)
 		if (!buf)
 			return (status);
 	}
-
 	strings = make_string_list_from_buffer(buf, fd, &status);
-
 	dest = join_strings(strings);
-
-	printf("result: \"%s\"\n", dest);
 	*line = dest;
 	return 1;
 }
