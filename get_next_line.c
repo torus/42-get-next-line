@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 13:39:20 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 13:53:18 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,17 +101,8 @@ static char			*join_strings(t_string_list *str)
 	return (dest);
 }
 
-int	get_next_line(int fd, char **line)
+t_string_list	*make_string_list_from_buffer(t_buffer_list *buf, int fd)
 {
-	static t_buffer_list	*buffers;
-	t_buffer_list			*buf;
-
-	printf("buffers: %p\n", buffers);
-
-	buf = find_buffer(buffers, fd);
-	if (!buf)
-		buf = buffers = new_buffer_list(buffers, fd);
-
 	t_string_list	*strings;
 	t_string_list	*str;
 	strings = NULL;
@@ -148,6 +139,22 @@ int	get_next_line(int fd, char **line)
 			done = 1;
 		}
 	}
+	return (strings);
+}
+
+int	get_next_line(int fd, char **line)
+{
+	static t_buffer_list	*buffers;
+	t_buffer_list			*buf;
+
+	printf("buffers: %p\n", buffers);
+
+	buf = find_buffer(buffers, fd);
+	if (!buf)
+		buf = buffers = new_buffer_list(buffers, fd);
+
+	t_string_list	*strings;
+	strings = make_string_list_from_buffer(buf, fd);
 
 	char	*dest;
 	dest = join_strings(strings);
