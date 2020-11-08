@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:42:13 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 14:48:47 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/08 16:05:34 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ struct						s_buflist
 };
 
 typedef struct s_strlist	t_string_list;
-struct						s_string_list
+struct						s_strlist
 {
 	char			*str;
 	size_t			size;
@@ -37,5 +37,11 @@ struct						s_string_list
 };
 
 void						*ft_memcpy(void *dst, const void *src, size_t n);
+
+t_buffer_list				*find_buffer(t_buffer_list *buffers, int fd);
+t_buffer_list				*new_buffer_list(t_buffer_list *tail, int fd);
+int							load_to_buffer(t_buffer_list *buf, int fd);
+t_string_list				*new_string(t_string_list *tail,
+										const char *str, size_t size);
 
 #endif
