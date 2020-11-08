@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/07 17:47:20 by thisai           ###   ########.fr       */
+/*   Updated: 2020/11/07 20:46:01 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,12 @@ int	get_next_line(int fd, char **line)
 			buf->size = read_size;
 			buf->cursor = 0;
 			if (read_size == 0)
-				break ;
+			{
+				if (!strings)
+					return (0);
+				else
+					break ;
+			}
 			/* printf("read: \"%s\"\n", buf->buffer); */
 		}
 
