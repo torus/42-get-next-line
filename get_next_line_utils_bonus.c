@@ -42,6 +42,8 @@ t_buffer_list	*new_buffer_list(t_buffer_list *tail, int fd)
 	t_buffer_list	*buf;
 
 	buf = malloc(sizeof(t_buffer_list));
+	if (!buf)
+		return (NULL);
 	buf->fd = fd;
 	buf->cursor = 0;
 	buf->size = 0;
@@ -69,9 +71,16 @@ t_string_list	*new_string(t_string_list *tail,
 	t_string_list	*new_str;
 
 	new_str = malloc(sizeof(t_string_list));
+	if (!new_str)
+		return (NULL);
 	new_str->next = tail;
 	new_str->size = size;
 	new_str->str = malloc(size);
+	if (!new_str->str)
+	{
+		free(new_str);
+		return (NULL);
+	}
 	ft_memcpy(new_str->str, str, size);
 	return (new_str);
 }
