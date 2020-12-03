@@ -35,6 +35,8 @@ static char				*join_strings(t_string_list *str)
 
 	len = string_list_length(str);
 	dest = malloc(len + 1);
+	if (!dest)
+		return (NULL);
 	p = dest + len;
 	*p = '\0';
 	while (str)
