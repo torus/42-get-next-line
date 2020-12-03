@@ -12,7 +12,7 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void			*ft_memcpy(void *dst, const void *src, size_t n)
 {
