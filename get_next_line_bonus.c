@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 18:23:18 by thisai           ###   ########.fr       */
+/*   Updated: 2020/12/06 15:39:11 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static t_string_list	*append_string(t_string_list *strings,
 	strings = new_string(strings, buf->buffer + buf->cursor,
 							index - buf->cursor);
 	buf->cursor = index;
-	if (buf->buffer[index] == '\n')
+	if (buf->cursor < buf->size && buf->buffer[index] == '\n')
 	{
 		buf->cursor++;
 		*done = 1;
@@ -80,6 +80,7 @@ t_string_list			*make_string_list_from_buffer(t_buffer_list *buf,
 
 	strings = NULL;
 	done = 0;
+	*status = 1;
 	while (!done)
 	{
 		if (buf->cursor == buf->size)
@@ -90,13 +91,11 @@ t_string_list			*make_string_list_from_buffer(t_buffer_list *buf,
 			{
 				if (!strings)
 					return (NULL);
-				else
-					break ;
+				break ;
 			}
 		}
 		strings = append_string(strings, buf, &done);
 	}
-	*status = 1;
 	return (strings);
 }
 
@@ -117,12 +116,11 @@ int						get_next_line(int fd, char **line)
 		buffers = buf;
 	}
 	strings = make_string_list_from_buffer(buf, fd, &status);
-	if (strings)
 	{
 		dest = join_strings(strings);
 		*line = dest;
 		if (!dest)
 			status = -1;
 	}
-	return (status);
+	return (status > 0 ? 1 : status);
 }
