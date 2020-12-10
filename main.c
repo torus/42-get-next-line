@@ -29,13 +29,18 @@ void test_fd(int fd)
 	free(line);
 
 	int count = 0;
-	while(get_next_line(fd, &line) > 0)
+	int ret;
+	while((ret = get_next_line(fd, &line)) >= 0)
 	{
-		printf("read: %s\n", line);
+		printf("read: %d: %s\n", ret, line);
 		count++;
 		free(line);
+		line = NULL;
+		if (!ret)
+			break;
 	}
-	assert(count == 6);
+	printf("ret: %d\n", ret);
+	assert(count == 8);
 }
 
 void test_stdin()
@@ -49,6 +54,25 @@ void test_single_file()
 	test_fd(fd);
 }
 
+void test_single_file2()
+{
+	//int fd = open("64.txt", O_RDONLY);
+	int fd = open("Get_Next_Line_Tester/test/64bit_paragraph.txt", O_RDONLY);
+	char *line;
+	int count = 0;
+	int ret;
+	while((ret = get_next_line(fd, &line)) >= 0)
+	{
+		printf("read: %d: %s\n", ret, line);
+		count++;
+		free(line);
+		line = NULL;
+		if (!ret)
+			break;
+	}
+	printf("ret: %d\n", ret);
+}
+
 void test_multiple()
 {
 	int fd_even = open("sample-even.txt", O_RDONLY);
@@ -60,15 +84,17 @@ void test_multiple()
 	do {
 		res1 = get_next_line(fd_even, &line1);
 		res2 = get_next_line(fd_odd, &line2);
-		if (res1 > 0)
+		if (res1 >= 0)
 		{
 			printf("even: %s\n", line1);
 			free(line1);
+			line1 = NULL;
 		}
-		if (res2 > 0)
+		if (res2 >= 0)
 		{
 			printf("odd: %s\n", line2);
 			free(line2);
+			line2 = NULL;
 		}
 	} while (res1 > 0 || res2 > 0);
 }
@@ -85,6 +111,7 @@ int main(void)
 	test_single_file();
 	test_multiple();
 	test_invaild_fd();
+	test_single_file2();
 
 	return 0;
 }
