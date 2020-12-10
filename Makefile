@@ -6,7 +6,7 @@
 #    By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/07 13:03:22 by thisai            #+#    #+#              #
-#    Updated: 2020/12/02 19:16:36 by thisai           ###   ########.fr        #
+#    Updated: 2020/12/06 15:41:14 by thisai           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -25,10 +25,12 @@ CFLAGS = -Wall -Wextra -D BUFFER_SIZE=$(BUFFER_SIZE) -fsanitize=address
 testall:
 	$(MAKE) test BUFFER_SIZE=1
 	$(MAKE) test BUFFER_SIZE=32
+	$(MAKE) test BUFFER_SIZE=65
 	$(MAKE) test BUFFER_SIZE=9999
 	$(MAKE) test BUFFER_SIZE=10000000
 	$(MAKE) test-bonus BUFFER_SIZE=1
 	$(MAKE) test-bonus BUFFER_SIZE=32
+	$(MAKE) test-bonus BUFFER_SIZE=65
 	$(MAKE) test-bonus BUFFER_SIZE=9999
 	$(MAKE) test-bonus BUFFER_SIZE=10000000
 
