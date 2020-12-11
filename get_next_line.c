@@ -116,7 +116,7 @@ int						get_next_line(int fd, char **line)
 		buffers = buf;
 	}
 	strings = make_string_list_from_buffer(buf, fd, &status);
-	{
+	if (status >= 0) {
 		dest = join_strings(strings);
 		*line = dest;
 		if (!dest)
