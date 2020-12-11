@@ -104,9 +104,7 @@ void test_invaild_fd()
 	assert(get_next_line(999, &line) == -1);
 }
 
-const char *prog;
-
-int main(int argc, char **argv)
+int main()
 {
 	test_stdin();
 	test_single_file();
@@ -117,8 +115,7 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-#ifdef __OSX__
-
+#ifdef __APPLE__
 #include <sys/types.h>
 #include <unistd.h>
 
