@@ -20,7 +20,8 @@ HEADERS = src/get_next_line.h
 HEADERS_BONUS = src/get_next_line_bonus.h
 
 # CFLAGS = -Wall -Wextra -Werror -D BUFFER_SIZE=32
-CFLAGS = -Wall -Wextra -D BUFFER_SIZE=$(BUFFER_SIZE) -fsanitize=address
+# CFLAGS = -Wall -Wextra -D BUFFER_SIZE=$(BUFFER_SIZE) -fsanitize=address
+CFLAGS = -Wall -Wextra -D BUFFER_SIZE=$(BUFFER_SIZE)
 
 testall:
 	$(MAKE) test BUFFER_SIZE=1

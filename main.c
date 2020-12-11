@@ -56,8 +56,7 @@ void test_single_file()
 
 void test_single_file2()
 {
-	//int fd = open("64.txt", O_RDONLY);
-	int fd = open("Get_Next_Line_Tester/test/64bit_paragraph.txt", O_RDONLY);
+	int fd = open("64.txt", O_RDONLY);
 	char *line;
 	int count = 0;
 	int ret;
@@ -105,7 +104,9 @@ void test_invaild_fd()
 	assert(get_next_line(999, &line) == -1);
 }
 
-int main(void)
+const char *prog;
+
+int main(int argc, char **argv)
 {
 	test_stdin();
 	test_single_file();
@@ -115,3 +116,18 @@ int main(void)
 
 	return 0;
 }
+
+#ifdef __OSX__
+
+#include <sys/types.h>
+#include <unistd.h>
+
+__attribute__((destructor))
+void end()
+{
+	char buf[100];
+	sprintf(buf, "leaks %d", getpid());
+	printf("checking leaks with: %s\n", buf);
+    system(buf);
+}
+#endif
