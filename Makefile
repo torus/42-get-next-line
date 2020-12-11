@@ -19,6 +19,8 @@ SRCS_BONUS = src/get_next_line_bonus.c src/get_next_line_utils_bonus.c	\
 HEADERS = src/get_next_line.h
 HEADERS_BONUS = src/get_next_line_bonus.h
 
+UNAME = $(shell uname)
+
 # CFLAGS = -Wall -Wextra -Werror -D BUFFER_SIZE=32
 # CFLAGS = -Wall -Wextra -D BUFFER_SIZE=$(BUFFER_SIZE) -fsanitize=address
 CFLAGS = -Wall -Wextra -D BUFFER_SIZE=$(BUFFER_SIZE)
@@ -36,10 +38,18 @@ testall:
 	$(MAKE) test-bonus BUFFER_SIZE=10000000
 
 test: $(TARGET)
+ifeq ($(UNAME), Linux)
+	valgrind --leak-check=full --error-exitcode=666 ./$(TARGET) < sample.txt
+else
 	./$(TARGET) < sample.txt
+endif
 
 test-bonus: $(TARGET_BONUS)
+ifeq ($(UNAME), Linux)
+	valgrind --leak-check=full --error-exitcode=666 ./$(TARGET_BONUS) < sample.txt
+else
 	./$(TARGET_BONUS) < sample.txt
+endif
 
 $(TARGET): $(SRCS) $(HEADERS)
 	$(CC) -o $@ $(CFLAGS) $(SRCS)

@@ -62,7 +62,8 @@ void test_single_file2()
 	int ret;
 	while((ret = get_next_line(fd, &line)) >= 0)
 	{
-		printf("read: %d: %s\n", ret, line);
+		/* printf("read: %d: %s\n", ret, line); */
+		assert(strlen(line) == 64);
 		count++;
 		free(line);
 		line = NULL;
