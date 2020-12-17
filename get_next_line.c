@@ -101,19 +101,19 @@ t_string_list			*make_string_list_from_buffer(t_buffer_list *buf,
 
 int						get_next_line(int fd, char **line)
 {
-	static t_buffer_list	*buffers;
+	static t_buffer_list	buffers;
 	t_buffer_list			*buf;
 	t_string_list			*strings;
 	char					*dest;
 	int						status;
 
-	buf = find_buffer(buffers, fd);
+	buf = find_buffer(&buffers, fd);
 	if (!buf)
 	{
-		buf = new_buffer_list(buffers, fd);
+		buf = new_buffer_list(buffers.next, fd);
 		if (!buf)
 			return (-1);
-		buffers = buf;
+		buffers.next = buf;
 	}
 	strings = make_string_list_from_buffer(buf, fd, &status);
 	if (status >= 0) {

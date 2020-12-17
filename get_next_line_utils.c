@@ -28,11 +28,25 @@ void			*ft_memcpy(void *dst, const void *src, size_t n)
 
 t_buffer_list	*find_buffer(t_buffer_list *buffers, int fd)
 {
-	while (buffers)
+	t_buffer_list	*buf;
+
+	buf = buffers;
+	while (buf)
 	{
-		if (buffers->fd == fd)
-			return (buffers);
-		buffers = buffers->next;
+		if (buf->fd == fd)
+			return (buf);
+		buf = buf->next;
+	}
+	buf = buffers;
+	while (buf)
+	{
+		if (!buf->occupied)
+		{
+			buf->occupied = 1;
+			buf->fd = fd;
+			return (buf);
+		}
+		buf = buf->next;
 	}
 	return (NULL);
 }
@@ -48,7 +62,7 @@ t_buffer_list	*new_buffer_list(t_buffer_list *tail, int fd)
 	buf->cursor = 0;
 	buf->size = 0;
 	buf->next = tail;
-	buf->eof = 0;
+	buf->occupied = 1;
 	return (buf);
 }
 
