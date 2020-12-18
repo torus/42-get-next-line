@@ -25,6 +25,7 @@ struct						s_buflist
 	size_t			cursor;
 	size_t			size;
 	t_buffer_list	*next;
+	t_buffer_list	*prev;
 	int				occupied;
 };
 

@@ -32,6 +32,7 @@ static char				*join_strings(t_string_list *str)
 	char			*dest;
 	char			*p;
 	t_string_list	*next;
+	int				size;
 
 	len = string_list_length(str);
 	dest = malloc(len + 1);
@@ -42,8 +43,9 @@ static char				*join_strings(t_string_list *str)
 	while (str)
 	{
 		next = str->next;
-		if (dest)
-			ft_memcpy(p - str->size, str->str, str->size);
+		size = str->size;
+		while (size--)
+			(p - str->size)[size] = str->str[size];
 		p -= str->size;
 		free(str->str);
 		free(str);
@@ -101,19 +103,20 @@ t_string_list			*make_string_list_from_buffer(t_buffer_list *buf,
 
 int						get_next_line(int fd, char **line)
 {
-	static t_buffer_list	buffers;
+	static t_buffer_list	buffers_head;
 	t_buffer_list			*buf;
 	t_string_list			*strings;
 	char					*dest;
 	int						status;
 
-	buf = find_buffer(&buffers, fd);
+	buf = find_buffer(&buffers_head, fd);
 	if (!buf)
 	{
-		buf = new_buffer_list(buffers.next, fd);
+		buf = new_buffer_list(buffers_head.next, fd);
 		if (!buf)
 			return (-1);
-		buffers.next = buf;
+		buffers_head.next = buf;
+		buf->prev = &buffers_head;
 	}
 	strings = make_string_list_from_buffer(buf, fd, &status);
 	if (status >= 0) {
@@ -121,6 +124,17 @@ int						get_next_line(int fd, char **line)
 		*line = dest;
 		if (!dest)
 			status = -1;
+	}
+	if (status <= 0)
+	{
+		buf->occupied = 0;
+		if (buf != &buffers_head)
+		{
+			buf->prev->next = buf->next;
+			if (buf->next)
+				buf->next->prev = buf->prev;
+			free(buf);
+		}
 	}
 	return (status > 0 ? 1 : status);
 }
