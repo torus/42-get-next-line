@@ -25,7 +25,8 @@ struct						s_buflist
 	size_t			cursor;
 	size_t			size;
 	t_buffer_list	*next;
-	int				eof;
+	t_buffer_list	*prev;
+	int				occupied;
 };
 
 typedef struct s_strlist	t_string_list;

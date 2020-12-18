@@ -14,18 +14,6 @@
 #include <unistd.h>
 #include "get_next_line.h"
 
-/* void			*ft_memcpy(void *dst, const void *src, size_t n) */
-/* { */
-/* 	char	*p; */
-
-/* 	if (src == dst) */
-/* 		return (dst); */
-/* 	p = dst; */
-/* 	while (n--) */
-/* 		*p++ = *(char*)src++; */
-/* 	return (dst); */
-/* } */
-
 t_buffer_list	*find_buffer(t_buffer_list *buffers, int fd)
 {
 	t_buffer_list	*buf;

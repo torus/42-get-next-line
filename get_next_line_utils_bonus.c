@@ -14,25 +14,29 @@
 #include <unistd.h>
 #include "get_next_line_bonus.h"
 
-void			*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	char	*p;
-
-	if (src == dst)
-		return (dst);
-	p = dst;
-	while (n--)
-		*p++ = *(char*)src++;
-	return (dst);
-}
-
 t_buffer_list	*find_buffer(t_buffer_list *buffers, int fd)
 {
-	while (buffers)
+	t_buffer_list	*buf;
+
+	buf = buffers;
+	while (buf)
 	{
-		if (buffers->fd == fd)
-			return (buffers);
-		buffers = buffers->next;
+		if (buf->fd == fd)
+			return (buf);
+		buf = buf->next;
+	}
+	buf = buffers;
+	while (buf)
+	{
+		if (!buf->occupied)
+		{
+			buf->occupied = 1;
+			buf->fd = fd;
+			buf->cursor = 0;
+			buf->size = 0;
+			return (buf);
+		}
+		buf = buf->next;
 	}
 	return (NULL);
 }
@@ -48,7 +52,9 @@ t_buffer_list	*new_buffer_list(t_buffer_list *tail, int fd)
 	buf->cursor = 0;
 	buf->size = 0;
 	buf->next = tail;
-	buf->eof = 0;
+	buf->occupied = 1;
+	if (tail)
+		tail->prev = buf;
 	return (buf);
 }
 
@@ -81,6 +87,8 @@ t_string_list	*new_string(t_string_list *tail,
 		free(new_str);
 		return (NULL);
 	}
-	ft_memcpy(new_str->str, str, size);
+	while (size--)
+		new_str->str[size] = str[size];
+	/* ft_memcpy(new_str->str, str, size); */
 	return (new_str);
 }
