@@ -25,6 +25,20 @@ UNAME = $(shell uname)
 # CFLAGS = -Wall -Wextra -D BUFFER_SIZE=$(BUFFER_SIZE) -fsanitize=address
 CFLAGS = -Wall -Wextra -D BUFFER_SIZE=$(BUFFER_SIZE)
 
+VALGRIND_OPTIONS = --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --error-exitcode=666
+
+ifeq ($(UNAME), Linux)
+VALGRIND = valgrind $(VALGRIND_OPTIONS)
+else
+VALGRIND =
+endif
+
+EXECUTION = $(VALGRIND) ./$(TARGET) stdin < sample.txt && \
+            $(VALGRIND) ./$(TARGET) single_file        && \
+            $(VALGRIND) ./$(TARGET) invaild_fd         && \
+            $(VALGRIND) ./$(TARGET) single_file2
+EXECUTION_BONUS = $(VALGRIND) ./$(TARGET_BONUS) < sample.txt
+
 testall:
 	$(MAKE) test BUFFER_SIZE=1
 	$(MAKE) test BUFFER_SIZE=32
@@ -38,21 +52,13 @@ testall:
 	$(MAKE) test-bonus BUFFER_SIZE=10000000
 
 test: $(TARGET)
-ifeq ($(UNAME), Linux)
-	valgrind --leak-check=full --error-exitcode=666 ./$(TARGET) < sample.txt
-else
-	./$(TARGET) < sample.txt
-endif
+	$(EXECUTION)
 
-test-bonus: $(TARGET_BONUS)
-ifeq ($(UNAME), Linux)
-	valgrind --leak-check=full --error-exitcode=666 ./$(TARGET_BONUS) < sample.txt
-else
-	./$(TARGET_BONUS) < sample.txt
-endif
+test-bonus: test $(TARGET_BONUS)
+	$(EXECUTION_BONUS)
 
 $(TARGET): $(SRCS) $(HEADERS)
 	$(CC) -o $@ $(CFLAGS) $(SRCS)
 
 $(TARGET_BONUS): $(SRCS_BONUS) $(HEADERS)
-	$(CC) -o $@ $(CFLAGS) $(SRCS_BONUS)
+	$(CC) -o $@ $(CFLAGS) -DBONUS $(SRCS_BONUS)

@@ -86,13 +86,13 @@ void test_multiple()
 		res2 = get_next_line(fd_odd, &line2);
 		if (res1 >= 0)
 		{
-			printf("even: %s\n", line1);
+			printf("even: %d: %s\n", res1, line1);
 			free(line1);
 			line1 = NULL;
 		}
 		if (res2 >= 0)
 		{
-			printf("odd: %s\n", line2);
+			printf("odd: %d: %s\n", res2, line2);
 			free(line2);
 			line2 = NULL;
 		}
@@ -105,13 +105,20 @@ void test_invaild_fd()
 	assert(get_next_line(999, &line) == -1);
 }
 
-int main()
+int main(int argc, char **argv)
 {
-	test_stdin();
-	test_single_file();
+	if (argc == 2 && !strcmp(argv[1], "stdin"))
+		test_stdin();
+	if (argc == 2 && !strcmp(argv[1], "single_file"))
+		test_single_file();
+	if (argc == 2 && !strcmp(argv[1], "invaild_fd"))
+		test_invaild_fd();
+	if (argc == 2 && !strcmp(argv[1], "single_file2"))
+		test_single_file2();
+
+#ifdef BONUS
 	test_multiple();
-	test_invaild_fd();
-	test_single_file2();
+#endif
 
 	return 0;
 }
