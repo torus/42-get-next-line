@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 15:25:40 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 18:09:12 by thisai           ###   ########.fr       */
+/*   Updated: 2020/12/19 15:50:59 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ int				load_to_buffer(t_buffer_list *buf, int fd)
 	return (read_size);
 }
 
-t_string_list	*new_string(t_string_list *tail,
-								const char *str, size_t size)
+t_string_list	*new_string(t_string_list *tail, const char *str, size_t size)
 {
 	t_string_list	*new_str;
 
@@ -89,11 +88,11 @@ t_string_list	*new_string(t_string_list *tail,
 	}
 	while (size--)
 		new_str->str[size] = str[size];
-	/* ft_memcpy(new_str->str, str, size); */
 	return (new_str);
 }
 
-void			clean_up_buffer(t_buffer_list *head, t_buffer_list *buf, int status)
+void			clean_up_buffer(t_buffer_list *head, t_buffer_list *buf,
+								int status)
 {
 	if (status <= 0)
 	{

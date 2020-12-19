@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:42:13 by thisai            #+#    #+#             */
-/*   Updated: 2020/11/08 16:05:34 by thisai           ###   ########.fr       */
+/*   Updated: 2020/12/19 15:49:50 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_buffer_list	*find_buffer(t_buffer_list *buffers, int fd);
 t_buffer_list	*new_buffer_list(t_buffer_list *tail, int fd);
 int				load_to_buffer(t_buffer_list *buf, int fd);
 t_string_list	*new_string(t_string_list *tail, const char *str, size_t size);
-void			clean_up_buffer(t_buffer_list *head, t_buffer_list *buf, int status);
+void			clean_up_buffer(t_buffer_list *head, t_buffer_list *buf,
+								int status);
 
 #endif

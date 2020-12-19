@@ -6,7 +6,7 @@
 /*   By: thisai <thisai@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:25:09 by thisai            #+#    #+#             */
-/*   Updated: 2020/12/06 15:37:06 by thisai           ###   ########.fr       */
+/*   Updated: 2020/12/19 15:49:04 by thisai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,8 @@ int						get_next_line(int fd, char **line)
 		buf->prev = &buffers_head;
 	}
 	strings = make_string_list_from_buffer(buf, fd, &status);
-	if (status >= 0) {
+	if (status >= 0)
+	{
 		dest = join_strings(strings);
 		*line = dest;
 		if (!dest)
