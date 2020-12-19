@@ -10,14 +10,15 @@
 #                                                                              #
 #******************************************************************************#
 
-BUFFER_SIZE = 32
+SRCDIR = src
+
 TARGET = testmain-$(BUFFER_SIZE)
 TARGET_BONUS = testmain-bonus-$(BUFFER_SIZE)
-SRCS = src/get_next_line.c src/get_next_line_utils.c main.c
-SRCS_BONUS = src/get_next_line_bonus.c src/get_next_line_utils_bonus.c	\
+SRCS = $(SRCDIR)/get_next_line.c $(SRCDIR)/get_next_line_utils.c main.c
+SRCS_BONUS = $(SRCDIR)/get_next_line_bonus.c $(SRCDIR)/get_next_line_utils_bonus.c	\
 	 main.c
-HEADERS = src/get_next_line.h
-HEADERS_BONUS = src/get_next_line_bonus.h
+HEADERS = $(SRCDIR)/get_next_line.h
+HEADERS_BONUS = $(SRCDIR)/get_next_line_bonus.h
 
 UNAME = $(shell uname)
 
@@ -36,8 +37,11 @@ endif
 EXECUTION = $(VALGRIND) ./$(TARGET) stdin < sample.txt && \
             $(VALGRIND) ./$(TARGET) single_file        && \
             $(VALGRIND) ./$(TARGET) invaild_fd         && \
-            $(VALGRIND) ./$(TARGET) single_file2
-EXECUTION_BONUS = $(VALGRIND) ./$(TARGET_BONUS) < sample.txt
+            $(VALGRIND) ./$(TARGET) single_file2       && \
+            $(VALGRIND) ./$(TARGET) single_file3       && \
+            $(VALGRIND) ./$(TARGET) incomplete         && \
+            $(VALGRIND) ./$(TARGET) multiple_one_by_one
+EXECUTION_BONUS = $(VALGRIND) ./$(TARGET_BONUS) multiple
 
 testall:
 	$(MAKE) test BUFFER_SIZE=1
