@@ -175,26 +175,22 @@ void test_multiple_one_by_one()
 	free(line);
 }
 
+#define TEST(name)								\
+	if (argc == 2 && !strcmp(argv[1], #name))	\
+		test_ ## name()
+
 int main(int argc, char **argv)
 {
-	if (argc == 2 && !strcmp(argv[1], "stdin"))
-		test_stdin();
-	if (argc == 2 && !strcmp(argv[1], "single_file"))
-		test_single_file();
-	if (argc == 2 && !strcmp(argv[1], "invaild_fd"))
-		test_invaild_fd();
-	if (argc == 2 && !strcmp(argv[1], "single_file2"))
-		test_single_file2();
-	if (argc == 2 && !strcmp(argv[1], "single_file3"))
-		test_single_file3();
-	if (argc == 2 && !strcmp(argv[1], "incomplete"))
-		test_incomplete();
-	if (argc == 2 && !strcmp(argv[1], "multiple_one_by_one"))
-		test_multiple_one_by_one();
+	TEST(stdin);
+	TEST(invaild_fd);
+	TEST(single_file);
+	TEST(single_file2);
+	TEST(single_file3);
+	TEST(incomplete);
+	TEST(multiple_one_by_one);
 
 	// BONUS
-	if (argc == 2 && !strcmp(argv[1], "multiple"))
-		test_multiple();
+	TEST(multiple);
 
 	return 0;
 }
