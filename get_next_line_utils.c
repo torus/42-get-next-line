@@ -92,3 +92,18 @@ t_string_list	*new_string(t_string_list *tail,
 	/* ft_memcpy(new_str->str, str, size); */
 	return (new_str);
 }
+
+void			clean_up_buffer(t_buffer_list *head, t_buffer_list *buf, int status)
+{
+	if (status <= 0)
+	{
+		buf->occupied = 0;
+		if (buf != head)
+		{
+			buf->prev->next = buf->next;
+			if (buf->next)
+				buf->next->prev = buf->prev;
+			free(buf);
+		}
+	}
+}

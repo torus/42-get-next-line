@@ -125,16 +125,6 @@ int						get_next_line(int fd, char **line)
 		if (!dest)
 			status = -1;
 	}
-	if (status <= 0)
-	{
-		buf->occupied = 0;
-		if (buf != &buffers_head)
-		{
-			buf->prev->next = buf->next;
-			if (buf->next)
-				buf->next->prev = buf->prev;
-			free(buf);
-		}
-	}
+	clean_up_buffer(&buffers_head, buf, status);
 	return (status > 0 ? 1 : status);
 }
