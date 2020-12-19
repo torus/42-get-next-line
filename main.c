@@ -22,7 +22,7 @@ const char *sample_lines[] = {
 	"END OF FILE",
 };
 
-void test_fd(int fd)
+void test_loremipsum_fd(int fd)
 {
 	char *line = NULL;
 	int result = get_next_line(fd, &line);
@@ -57,13 +57,13 @@ void test_fd(int fd)
 
 void test_stdin()
 {
-	test_fd(0);
+	test_loremipsum_fd(0);
 }
 
 void test_single_file()
 {
 	int fd = open("sample.txt", O_RDONLY);
-	test_fd(fd);
+	test_loremipsum_fd(fd);
 }
 
 void test_single_file2()
